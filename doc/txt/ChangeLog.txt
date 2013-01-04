@@ -5,10 +5,52 @@ include::sflogo.txt[]
 
 Click to return to the link:index.html[uthash home page].
 
+Version 1.9.7 (2012-10-09)
+--------------------------
+* utstring now supports substring search using `utstring_find` (thanks, Joe Wei!)
+* utlist now supports element 'prepend' and 'replace' (thanks, Zoltán Lajos Kis!)
+* utlist element prev/next fields can now have any names (thanks, Pawel S. Veselov!)
+* uthash cast quiets a clang warning (thanks, Roman Divacky and Baptiste Daroussin!)
+* uthash userguide example shows how to check key uniqueness (thanks, Richard Cook!)
+* uthash HASH_MUR compiles under MSVC++ 10 in C mode (thanks, Arun Kirthi Cherian!)
+* `utstring_printf` now supports format checking (thanks, Donald Carr!)
+
+Version 1.9.6 (2012-04-28)
+--------------------------
+* add utarray_prev (thanks, Ben Hiett!)
+* add parens/casts for greater compatibility (thanks, Atis, Debasis Ganguly, and Steve McClellan!)
+* added ifndef to uthash_malloc and related hooks (thanks, Holger Machens!)
+* edit examples so they do not leak memory (thanks, 任晶磊!)
+
+Version 1.9.5 (2011-11-16)
+--------------------------
+* added `utarray_renew`
+* fixed memory leak in `uthash_clear` when using Bloom filter (thanks, Jan Hättig!)
+* utarray now copies the UT_icd on array creation rather than storing a pointer
+* add parentheses to `HASH_ADD` to fix preprocessing of certain arguments (thanks, Aaron Rosen!) 
+* more parenthesizations for greater macro argument flexibility
+
+Version 1.9.4 (2011-06-05)
+--------------------------
+* uthash now supports MurmurHash v3 
+* utlist now includes concatenation macros (`LL_CONCAT` and `DL_CONCAT`)
+* utarray now supports binary search (`utarray_find`)
+* utstring now supports a new-or-clear-existing macro (`utstring_renew`)
+* documented technique for a multi-level hash table 
+* clarified scope requirements for `UT_icd` in the utarray documentation
+* fixed termination when `utstring_clear` is followed by `utstring_body` 
+* fixed utarray_inserta macro when used with complex arguments
+* on Visual Studio define missing type `uint8_t` 
+* Debian/Ubuntu include uthash in the package `uthash-dev`. 
+* uthash has been downloaded 16,211 times. 
+
+Thanks to Yu Feng, Richard Cook, Dino Ciuffetti, Chris Groer, and Arun Cherian
+for feedback and fixes in this release!
+
 Version 1.9.3 (2010-10-31)
 --------------------------
-* fix an ifdef for compatibility with Intel compiler (thanks, degski!)
-* fix HASH_ITER macro to satisfy C++ casting rules (thanks, Erik Bai!)
+* fix an `ifdef` for compatibility with Intel compiler (thanks, degski!)
+* fix `HASH_ITER` macro to satisfy C++ casting rules (thanks, Erik Bai!)
 
 Version 1.9.2 (2010-10-04)
 --------------------------

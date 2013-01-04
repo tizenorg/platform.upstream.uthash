@@ -1,3 +1,4 @@
+#CC=clang
 HASHDIR = ../src
 FUNCS = BER SAX FNV OAT JEN SFH 
 SPECIAL_FUNCS = MUR
@@ -9,10 +10,12 @@ PROGS = test1 test2 test3 test4 test5 test6 test7 test8 test9   \
         test34 test35 test36 test37 test38 test39 test40 test41 \
         test42 test43 test44 test45 test46 test47 test48 test49 \
 				test50 test51 test52 test53 test54 test55 test56 test57 \
-        test58
+        test58 test59 test60 test61 test62 test63 test64 test65 \
+        test66 test67 test68 test69 test70 test71 test72 test73 \
+        test74 test75 test76 test77 test78
 CFLAGS = -I$(HASHDIR) 
 #CFLAGS += -DHASH_BLOOM=16
-#CFLAGS += -O3
+#CFLAGS += -O2
 CFLAGS += -g
 #CFLAGS += -Wstrict-aliasing=2
 CFLAGS += -Wall 
@@ -36,11 +39,6 @@ ifneq ($(strip $(shell $(CC) -v 2>&1 |egrep "gcc")),)
 ifeq ($(HASH_FUNCTION),"HASH_MUR")
   CFLAGS += $(MUR_CFLAGS)
 endif
-endif
-
-# Prefer 64-bit compilation on Mac OS X (not necessary, just faster)
-ifneq ($(strip $(shell $(CC) -v 2>&1 |egrep "i[0-9]+-apple-darwin")),)
-  CFLAGS += -m64
 endif
 
 # detect Cygwin

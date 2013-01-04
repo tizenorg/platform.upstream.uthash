@@ -1,4 +1,4 @@
-all: css userguide changelog pdf utlist
+all: css userguide changelog pdf utlist utstring utarray
 
 userguide:	txt/userguide.txt
 	asciidoc --unsafe --out-file=html/userguide.html -a linkcss=1 -a theme=tdh $<
@@ -35,8 +35,8 @@ pdf: txt/userguide.txt
 	rm -f txt/userguide.xml
 
 css: html/toc.css
-	cat /etc/asciidoc/stylesheets/xhtml11.css html/toc.css > html/tdh.css
-	cp /etc/asciidoc/stylesheets/xhtml11-quirks.css html/tdh-quirks.css 
+	if [ ! -d ~/.asciidoc/themes/tdh ]; then mkdir -p ~/.asciidoc/themes/tdh; fi
+	cp html/toc.css ~/.asciidoc/themes/tdh
 
 docbook: txt/userguide.txt
 	asciidoc -b docbook --out-file=/tmp/userguide.xml $<

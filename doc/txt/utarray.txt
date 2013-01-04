@@ -1,7 +1,7 @@
 utarray: dynamic array macros for C 
 ===================================
 Troy D. Hanson <thanson@users.sourceforge.net>
-v1.9, March 2010
+v1.9.7, October 2012
 
 include::sflogo.txt[]
 include::topnav_utarray.txt[]
@@ -189,9 +189,10 @@ array.
 #include <stdio.h>
 #include "utarray.h"
 
+UT_icd long_icd = {sizeof(long), NULL, NULL, NULL };
+
 int main() {
   UT_array *nums;
-  UT_icd long_icd = {sizeof(long), NULL, NULL, NULL };
   long l, *p;
   utarray_new(nums, &long_icd);
 
@@ -224,10 +225,11 @@ typedef struct {
     int b;
 } intpair_t;
 
+UT_icd intpair_icd = {sizeof(intpair_t), NULL, NULL, NULL};
+
 int main() {
 
   UT_array *pairs;
-  UT_icd intpair_icd = {sizeof(intpair_t), NULL, NULL, NULL};
   intpair_t ip, *p;
   utarray_new(pairs,&intpair_icd);
 
@@ -281,9 +283,10 @@ void intchar_dtor(void *_elt) {
   if (elt->s) free(elt->s);
 }
 
+UT_icd intchar_icd = {sizeof(intchar_t), NULL, intchar_copy, intchar_dtor};
+
 int main() {
   UT_array *intchars;
-  UT_icd intchar_icd = {sizeof(intchar_t), NULL, intchar_copy, intchar_dtor};
   intchar_t ic, *p;
   utarray_new(intchars, &intchar_icd);
 
@@ -330,8 +333,10 @@ Operations
 | utarray_erase(UT_array *a,int pos,int len) | remove len elements from a[pos]..a[pos+len-1]
 | utarray_clear(UT_array *a) | clear all elements from a, setting its length to zero
 | utarray_sort(UT_array *a,cmpfcn *cmp) | sort elements of a using comparison function 
+| utarray_find(UT_array *a,void *v, cmpfcn *cmp) | find element v in utarray (must be sorted)
 | utarray_front(UT_array *a) | get first element of a
 | utarray_next(UT_array *a,void *e) | get element of a following e (front if e is NULL)
+| utarray_prev(UT_array *a,void *e) | get element of a before e (back if e is NULL)
 | utarray_back(UT_array *a) | get last element of a
 |===============================================================================
 
@@ -355,8 +360,13 @@ Notes
       return _a - _b;
   }
 
-4. A 'pointer' to a particular element (obtained using `utarray_eltptr` or
-   `utarray_front`, `utarray_next`, `utarray_back`) becomes invalid whenever
+4. `utarray_find` uses a binary search to locate an element having a certain value
+   according to the given comparison function. The utarray must be first sorted
+   using the same comparison function. An example of using `utarray_find` with
+   a utarray of strings is included in `tests/test61.c`.
+
+5. A 'pointer' to a particular element (obtained using `utarray_eltptr` or
+   `utarray_front`, `utarray_next`, `utarray_prev`, `utarray_back`) becomes invalid whenever
    another element is inserted into the utarray. This is because the internal
    memory management may need to `realloc` the element storage to a new address.
    For this reason, it's usually better to refer to an element by its integer

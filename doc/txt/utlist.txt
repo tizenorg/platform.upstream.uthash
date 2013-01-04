@@ -1,7 +1,7 @@
 utlist: linked list macros for C structures
 ===========================================
 Troy D. Hanson <thanson@users.sourceforge.net>
-v1.9, March 2010
+v1.9.7, October 2012
 
 include::sflogo.txt[]
 include::topnav_utlist.txt[]
@@ -65,7 +65,7 @@ You can use any structure with these macros, as long as the structure
 contains a `next` pointer. If you want to make a doubly-linked list, 
 the element also needs to have a `prev` pointer.
 
-  typedef struct {
+  typedef struct element {
       char *name;
       struct element *prev; /* needed for a doubly-linked list only */
       struct element *next; /* needed for singly- or doubly-linked lists */
@@ -73,6 +73,12 @@ the element also needs to have a `prev` pointer.
 
 You can name your structure anything. In the example above it is called `element`.
 Within a particular list, all elements must be of the same type. 
+
+Flexible prev/next naming
+^^^^^^^^^^^^^^^^^^^^^^^^^
+You can name your `prev` and `next` pointers something else. If you do, there is
+a <<flex_names,family of macros>> that work identically but take these names as
+extra arguments.
 
 List head
 ~~~~~~~~~
@@ -90,7 +96,10 @@ iterating over them.
 |===============================================================================
 |Singly-linked             | Doubly-linked              | Circular, doubly-linked
 |LL_PREPEND(head,add);     | DL_PREPEND(head,add);      | CDL_PREPEND(head,add;
+|LL_PREPEND_ELEM(head,elt,add) | DL_PREPEND_ELEM(head,elt,add) | CDL_PREPEND_ELEM(head,elt,add) 
+|LL_REPLACE_ELEM(head,elt,add) | DL_REPLACE_ELEM(head,elt,add) | CDL_REPLACE_ELEM(head,elt,add) 
 |LL_APPEND(head,add);      | DL_APPEND(head,add);       | 
+|LL_CONCAT(head1,head2);   | DL_CONCAT(head1,head2);    | 
 |LL_DELETE(head,del);      | DL_DELETE(head,del);       | CDL_DELETE(head,del);
 |LL_SORT(head,cmp);        | DL_SORT(head,cmp);         | CDL_SORT(head,cmp);
 |LL_FOREACH(head,elt) {...}| DL_FOREACH(head,elt) {...} | CDL_FOREACH(head,elt) {...}
@@ -101,7 +110,12 @@ iterating over them.
 
 'Prepend' means to insert an element in front of the existing list head (if any),
 changing the list head to the new element. 'Append' means to add an element at the
-end of the list, so it becomes the new tail element.  
+end of the list, so it becomes the new tail element. 'Concatenate' takes two
+properly constructed lists and appends the second list to the first.  (Visual
+Studio 2008 does not support `LL_CONCAT` and `DL_CONCAT`, but VS2010 is ok.)
+To prepend before an arbitrary element instead of the list head, use the
+`_PREPEND_ELEM` macro family. To 'replace' an arbitary list element with another
+element use the `_REPLACE_ELEM` family of macros.
 
 The 'sort' operation never moves the elements in memory; rather it only adjusts
 the list order by altering the `prev` and `next` pointers in each element. Also
@@ -130,8 +144,8 @@ del::
   A pointer to the list element structure you are deleting from the list.
 elt::
   A pointer that will be assigned to each list element in succession (see
-  example) in the case of iteration macros; also, the output pointer from
-  the search macros.
+  example) in the case of iteration macros; or, the output pointer from
+  the search macros; or the element to be prepended to or replaced.
 like::
   An element pointer, having the same type as `elt`, for which the search macro 
   seeks a match (if found, the match is stored in `elt`). A match is determined
@@ -212,5 +226,41 @@ int main(int argc, char *argv[]) {
 }
 --------------------------------------------------------------------------------
 
-// vim: set nowrap syntax=asciidoc: 
+[[flex_names]]
+Other names for prev and next 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If the `prev` and `next` fields are named something else, a separate group of
+macros must be used. These work the same as the regular macros, but take the
+field names as extra parameters. 
+
+These "flexible field name" macros are shown below. They all end with "2". Each
+operates the same as its counterpart without the 2, but they take the name of
+the `prev` and `next` fields (as applicable) as trailing arguments.
+
+.Flexible field name macros
+ LL_SORT2(list, cmp, next)
+ DL_SORT2(list, cmp, prev, next)
+ CDL_SORT2(list, cmp, prev, next)
+ LL_PREPEND2(head,add,next)
+ LL_CONCAT2(head1,head2,next)
+ LL_APPEND2(head,add,next)
+ LL_DELETE2(head,del,next)
+ LL_FOREACH2(head,el,next)
+ LL_FOREACH_SAFE2(head,el,tmp,next)
+ LL_SEARCH_SCALAR2(head,out,field,val,next)
+ LL_SEARCH2(head,out,elt,cmp,next)
+ DL_PREPEND2(head,add,prev,next)
+ DL_APPEND2(head,add,prev,next)
+ DL_CONCAT2(head1,head2,prev,next)
+ DL_DELETE2(head,del,prev,next)
+ DL_FOREACH2(head,el,next)
+ DL_FOREACH_SAFE2(head,el,tmp,next)
+ CDL_PREPEND2(head,add,prev,next)
+ CDL_DELETE2(head,del,prev,next)
+ CDL_FOREACH2(head,el,next)
+ CDL_FOREACH_SAFE2(head,el,tmp1,tmp2,prev,next)
+ CDL_SEARCH_SCALAR2(head,out,field,val,next)
+ CDL_SEARCH2(head,out,elt,cmp,next)
+
+// vim: set tw=80 wm=2 syntax=asciidoc: 
 
