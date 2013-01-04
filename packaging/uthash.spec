@@ -1,11 +1,10 @@
 Name:           uthash
-Version:        1.9.3
+Version:        1.9.7
 Release:        1
 License:        BSD-style single-clause
 Summary:        A hash table for C structures
 Group:          System/Kernel
 Source0:        %{name}-%{version}.tar.bz2
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %description
 Any C structure can be stored in a hash table using
@@ -15,11 +14,11 @@ act as the key. Then use these macros to store,
 retrieve or delete items from the hash table.
 
 %package devel
-Summary:        %{summary}
+Summary:        Development files for %name
 Group:          Development/Libraries
 
 %description devel
-Description: %{summary}
+Development files for %name.
 
 %prep
 %setup -q
