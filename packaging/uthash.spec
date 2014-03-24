@@ -5,7 +5,7 @@ License:        BSD-style single-clause
 Summary:        A hash table for C structures
 Group:          System/Kernel
 Source0:        %{name}-%{version}.tar.bz2
-Source1001: 	uthash.manifest
+Source1001:     uthash.manifest
 
 %description
 Any C structure can be stored in a hash table using
@@ -24,14 +24,14 @@ Development files for %name.
 %prep
 %setup -q
 cp %{SOURCE1001} .
+
 %build
+#empty
 
 %install
-
-mkdir -p  %{buildroot}/usr/include
+mkdir -p  %{buildroot}%{_includedir}
 cd src
-cp utarray.h uthash.h utlist.h utstring.h %{buildroot}/usr/include
-
+cp utarray.h uthash.h utlist.h utstring.h %{buildroot}%{_includedir}
 
 %files devel
 %manifest %{name}.manifest
@@ -40,4 +40,3 @@ cp utarray.h uthash.h utlist.h utstring.h %{buildroot}/usr/include
 %{_includedir}/uthash.h
 %{_includedir}/utlist.h
 %{_includedir}/utstring.h
-
