@@ -26,6 +26,9 @@ Development files for %name.
 cp %{SOURCE1001} .
 
 %build
+export CFLAGS+=" -fvisibility=hidden"
+  export CXXFLAGS+=" -fvisibility=hidden"
+  
 #empty
 
 %install
